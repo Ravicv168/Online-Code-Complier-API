@@ -1,7 +1,11 @@
 package com.example.compilerapi.service;
 
 import java.io.*;
+import java.util.concurrent.CompletableFuture;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.compilerapi.model.CodeRequest;
@@ -9,9 +13,13 @@ import com.example.compilerapi.model.CodeResponse;
 
 @Service
 public class CodeExecutorService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CodeExecutorService.class);
 
 	// Method to execute the code based on the language
-	public CodeResponse executeCode(CodeRequest coderequest) {
+	@Async("taskExecutor")
+	public CompletableFuture<CodeResponse> executeCode(CodeRequest coderequest) {
+		logger.info("Executing code on thread: {}", Thread.currentThread().getName());
 		String output = "";
 	    String error = "";
 	    boolean success = false;
@@ -32,16 +40,19 @@ public class CodeExecutorService {
                 message = "Execution failed";
                 break;
 			}
+			Thread.sleep(10000);
 		}catch (Exception e) {
 			error="Error Executing Code: "+ e.getMessage();
 			message = "Execution failed";
 		}
-		return new CodeResponse(output, error, success, language, message);
+	
+		return CompletableFuture.completedFuture(new CodeResponse(output, error, success, language, message));
 	}
 	
 	// Method to execute Java code
 	private String executeJavaCode(String code) throws Exception{
 		
+		logger.info("Executing Java code on thread: {}", Thread.currentThread().getName());
 		// Save Java code to a temporary file
 		File file = saveCodeToFile(code, ".java");
 		String classname = file.getName().replace(".java", "");
@@ -56,6 +67,8 @@ public class CodeExecutorService {
 	
 	// Method to execute Java code
 	private String executePythonCode(String code) throws Exception {
+		
+		logger.info("Executing python code on thread: {}", Thread.currentThread().getName());
 		// Save Python code to a temporary file
         File sourceFile = saveCodeToFile(code, ".py");
 

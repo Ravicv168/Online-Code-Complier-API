@@ -1,5 +1,7 @@
 package com.example.compilerapi.controller;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +20,7 @@ public class CodeExecutorController {
 	CodeExecutorService codeExecutorService;
 
 	@PostMapping
-	public CodeResponse executeCode(@RequestBody CodeRequest coderequest) {
+	public CompletableFuture<CodeResponse> executeCode(@RequestBody CodeRequest coderequest) {
 		return codeExecutorService.executeCode(coderequest);
 	}
 }
