@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.compilerapi.model.CodeRequest;
+import com.example.compilerapi.model.CodeResponse;
 import com.example.compilerapi.service.CodeExecutorService;
 
 @RestController
@@ -17,7 +18,7 @@ public class CodeExecutorController {
 	CodeExecutorService codeExecutorService;
 
 	@PostMapping
-	public String executeCode(@RequestBody CodeRequest coderequest) {
+	public CodeResponse executeCode(@RequestBody CodeRequest coderequest) {
 		return codeExecutorService.executeCode(coderequest);
 	}
 }

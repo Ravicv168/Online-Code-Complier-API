@@ -6,18 +6,41 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.stereotype.Service;
 
 import com.example.compilerapi.model.CodeRequest;
+import com.example.compilerapi.model.CodeResponse;
 
 @Service
 public class CodeExecutorService {
 
-	public String executeCode(CodeRequest coderequest) {
-		String output="";
+	public CodeResponse executeCode(CodeRequest coderequest) {
+		String output = "";
+	    String error = "";
+	    boolean success = false;
+	    String language = coderequest.getLanguage();
 		try {
-		output=executeJavaCode(coderequest.getCode());
+			switch (coderequest.getLanguage().toLowerCase()) {
+            case "java":
+                output = executeJavaCode(coderequest.getCode());
+                success = true;
+                break;
+//            case "c":
+//                output = executeCCode(coderequest.getCode());
+//                break;
+//            case "cpp":
+//                output = executeCppCode(coderequest.getCode());
+//                success = true;
+//                break;
+            case "python":
+                output = executePythonCode(coderequest.getCode());
+                success = true;
+                break;
+            default:
+                output = "Unsupported language: " + coderequest.getLanguage();
+                break;
+			}
 		}catch (Exception e) {
-			output="Error Executing Code: "+ e.getMessage();
+			error="Error Executing Code: "+ e.getMessage();
 		}
-		return output;
+		return new CodeResponse(output, error, success, language, "Execution Complete");
 	}
 	
 	private String executeJavaCode(String code) throws Exception{
@@ -30,6 +53,12 @@ public class CodeExecutorService {
 		
 		return runJavaCode(classname);
 	}
+	
+	private String executePythonCode(String code) throws Exception {
+        File sourceFile = saveCodeToFile(code, ".py");
+
+        return runPythonCode(sourceFile);
+    }
 	
 	private File saveCodeToFile(String code, String fileextension) throws IOException {
 		String classname = extractClassName(code);
@@ -86,6 +115,11 @@ public class CodeExecutorService {
 	private String runJavaCode(String className) throws Exception {
         Process runProcess = new ProcessBuilder("java", className).start();
         return readProcessOutput(runProcess);
+    }
+	
+	private String runPythonCode(File sourceFile) throws Exception {
+        Process process = new ProcessBuilder("python", sourceFile.getAbsolutePath()).start();
+        return readProcessOutput(process);
     }
 	
 	private String readProcessOutput(Process process) throws IOException {
