@@ -40,7 +40,6 @@ public class CodeExecutorService {
                 message = "Execution failed";
                 break;
 			}
-			Thread.sleep(10000);
 		}catch (Exception e) {
 			error="Error Executing Code: "+ e.getMessage();
 			message = "Execution failed";

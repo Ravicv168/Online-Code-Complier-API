@@ -19,7 +19,7 @@ public class CodeExecutorController {
 	@Autowired
 	CodeExecutorService codeExecutorService;
 
-	@PostMapping
+	@PostMapping("execute")
 	public CompletableFuture<CodeResponse> executeCode(@RequestBody CodeRequest coderequest) {
 		return codeExecutorService.executeCode(coderequest);
 	}
