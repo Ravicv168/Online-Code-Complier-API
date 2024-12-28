@@ -16,16 +16,16 @@ This is an Online Code Compiler API built using Spring Boot. It allows users to 
 - Maven (for project management)
 
 ## Installation
-## Clone the repository
-   git clone https://github.com/yourusername/online-code-compiler-api.git
+### Clone the repository
+    git clone https://github.com/yourusername/online-code-compiler-api.git
 
   
-## Build the project using Maven
-   cd online-code-compiler-api
-   mvn clean install
+### Build the project using Maven
+    cd online-code-compiler-api
+    mvn clean install
 
-## Run the application use:
-   mvn spring-boot:run
+### Run the application use:
+    mvn spring-boot:run
 
 ## API Endpoints
 - To execute you code - POST /api/compiler
