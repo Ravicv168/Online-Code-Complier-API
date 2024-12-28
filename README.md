@@ -28,7 +28,7 @@ This is an Online Code Compiler API built using Spring Boot. It allows users to 
     mvn spring-boot:run
 
 ## API Endpoints
-- To execute you code - POST /api/compiler
+- To execute you code - POST /api/compiler/execute
 
 ## Testing the API
 Postman: Use Postman to test the endpoints by sending requests.
